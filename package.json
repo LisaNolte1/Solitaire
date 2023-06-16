@@ -1,0 +1,27 @@
+{
+  "name": "solitaire",
+  "version": "1.0.0",
+  "description": "- `npm run-script start:server`\r ### Notes\r - There is no need to restart the server if changes is made. With `nodemon` it restarts when the file is saved.",
+  "main": "config.js",
+  "scripts": {
+    "start:server": "cross-env NODE_ENV=dev nodemon ./server/server.js",
+    "start:web": "cross-env NODE_ENV=dev nodemon ./web/server.js",
+    "start:web:dep": "cross-env NODE_ENV=dep nodemon ./web/server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.3.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "mssql": "^9.1.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.20"
+  },
+  "author": "",
+  "license": "ISC"
+}
