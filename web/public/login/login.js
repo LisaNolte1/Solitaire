@@ -15,8 +15,9 @@ loginButton.addEventListener("click", (e) => {
     }
 })
 
-var registerButton = document.getElementById('register-button');
+const registerButton = document.getElementById("register-button");
 
-registerButton.addEventListener('click', function() {
-  window.location.href = 'register';
+registerButton.addEventListener("click", function(event) {
+    event.preventDefault(); // Stops form from submitting when clicking register
+    window.location.href = "/register";
 });

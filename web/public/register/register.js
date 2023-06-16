@@ -5,6 +5,8 @@ document.getElementById('registerForm').addEventListener('submit', function(even
   var password = document.getElementById('password').value;
 
   // Send the registration data to the backend
+  // currently doesnt work as db is not setup
+  // also needs encryption + salting + peppering
   fetch('http://localhost:8080/register', {
     method: 'POST',
     headers: {
@@ -20,11 +22,9 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     }
   })
   .then(function(data) {
-    // Registration successful, display a success message or redirect the user
     console.log('Registration successful:', data);
   })
   .catch(function(error) {
-    // Display an error message
     console.error('Registration failed:', error);
   });
 });
