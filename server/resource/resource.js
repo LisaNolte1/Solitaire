@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { getLeaderboard, postScore } = require('./resource.database')
+const { getLeaderboard, postScore, getUserScores } = require('./resource.database')
+
+function isAlphaNumeric(str) {
+    var regExp = /^[A-Za-z0-9]+$/;
+    return regExp.test(str);
+}
 
 router.get("/leaderboard", async (req, res) => {
     try {
@@ -11,6 +16,24 @@ router.get("/leaderboard", async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
+router.post("/:username/scores", (req, res, next) => {
+    const { score } = req.body
+    if (isNaN(parseInt(score))) {
+        res.status(400).json({ message: 'Score must be an Integer'})
+    } else {
+        next()
+    }
+});
+
+router.use("/:username/scores", (req, res, next) => {
+    const username = req.params.username
+    if (isAlphaNumeric(username)) {
+        next()
+    } else {
+        res.status(400).json({ message: `Username, ${username} is invalid`})
+    }
+})
 
 router.post("/:username/scores", async (req, res) => {
     const username = req.params.username

@@ -7,19 +7,21 @@ const config = {
   server: process.env.DB_SERVER,
   database: process.env.DB_DATABASE,
   options: {
-    encrypt: true // Enable encryption if needed
-  }
+    encrypt: true, 
+    trustServerCertificate: true,
+  },
 };
 
 async function postScore(username, score) {
-  const query = "INSERT INTO Score (Username, Score) VALUE (@username, @score)"
+  const query = "INSERT INTO Score (Username, Score) VALUES (@username, @score)"
 
   try {
-    await sql.connect(config)
+    let connection = await sql.connect(config);
 
-    sql.input("username", sql.VarChar, username)
-    sql.input("score", sql.Int, score)
-    const result = await sql.query(query)
+    const result = await connection.request()
+                                    .input("username", sql.VarChar, username)
+                                    .input("score", sql.Int, score)
+                                    .query(query)
 
     return result.rowsAffected[0] === 1;
   } catch (error) {
@@ -30,15 +32,16 @@ async function postScore(username, score) {
 
 
 async function getUserScores(username) {
-  const query = "SELECT Score FROM Score WHERE Username = @username ORDER BY Score Desc LIMIT 10"
+  const query = "SELECT TOP 10 Score FROM Score WHERE Username = @username ORDER BY Score Desc"
 
   try {
-    await sql.connect(config)
+    let connection = await sql.connect(config);
+    
+    const result = await connection.request()
+                                    .input("username", sql.VarChar, username)
+                                    .query(query)
 
-    sql.input("username", sql.VarChar, username)
-    const result = await sql.query(query)
-    console.log(result)
-    return result
+    return result.recordset
   } catch (error) {
     console.log(error)
     throw error
@@ -46,17 +49,12 @@ async function getUserScores(username) {
 }
 
 async function getLeaderboard() {
-  console.log(config)
-    const query = "SELECT Username, Score FROM Score ORDER BY Score DESC LIMIT 100"
+    const query = "SELECT TOP 100 Username, Score FROM Score ORDER BY Score DESC"
     try {
-        await sql.connect(config);
-        console.log("HERE")
-        const request = sql.Request();
-        const result = request.query(query);
-
+        let connection = await sql.connect(config);
+        const result = await connection.query(query);
         await sql.close();
-        console.log(result)
-        return result;
+        return result.recordset;
     } catch (error) {
         console.log(error)
         throw error;
