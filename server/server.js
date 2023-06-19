@@ -2,6 +2,7 @@ const express = require('express');
 const path = require("path");
 const cors = require('cors');
 const { registerUser } = require('./Auth/registerHandler');
+const { router } = require("./resource/resource")
 require('dotenv').config({path: `./dotenv/.env.${process.env.NODE_ENV}`});
 
 const app = express();
@@ -29,6 +30,8 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+app.use("/", router);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

@@ -10,3 +10,12 @@ CREATE TABLE Password (
   Salt VARCHAR(255) NOT NULL,
   FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
+
+CREATE TABLE Score (
+  ID INT PRIMARY KEY
+  Username VARCHAR(50) 
+  Score INT 
+);
+
+
+
