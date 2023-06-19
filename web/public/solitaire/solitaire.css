@@ -104,13 +104,12 @@ header {
    margin:0;
    padding:0;
    cursor: pointer;
+   padding-left: 2%;
  }
  
  header p {
    display: inline-block;
-   padding-left: 10px;
    padding-right: 10px;
- 
  }
  
  header ul {
@@ -127,81 +126,46 @@ header {
    border: none;
  }
 
-
-button {
-   font-size: 1.6vw;
-   background: #629736;
-   width: 10vw;
-   border: solid 1px lightgrey;
-   border-radius: 2px;
-   color: lightgrey;
-   font-family: 'Grenze', serif;
-}
-
 .highlight {
-   box-shadow: 0px 0px 10px .3vw rgb(255, 255, 255);
+   box-shadow: 0px 0px 10px .3vw rgb(235, 0, 0);
 }
 
-#score {
-   position: relative;
-   margin-top: 0%;
-   padding: 1em;
-   line-height: 1;
+header .timer {
+   margin-left: 1.5%;
 }
-#score > * {
-   display: inline-block;
-   min-width: 100px;
+
+header .move-count {
+   margin-left: 1.5%;
 }
-#score > *:last-child {
-   float: right;
-   text-align: right;
-}
-#score label {
-   margin-bottom: 0;
-}
-header .timer button {
-   display: none;
-   position: absolute;
-   -webkit-appearance: none;
-   background: transparent;
-   outline: none;
-   border: 0;
+
+header #play-pause {
+   background-color: transparent;
+   border: none;
+   box-shadow: none;
    padding: 0;
-   top: 0;
-   left: 0;
-   width: 3em;
-   height: 100%;
-}
-header .timer button i {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  font-size: 0;
-}
-header #play-pause i::before {
-  position: absolute;
-  top: 50%;
-  width: 0.75em;
-  height: 1em;
-  float: left;
-  margin-top: -0.5em;
-  font-size: 1.5rem;
-  content: none;
-}
-header #play-pause i#play::before {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-left: 18px solid #fff;
-  transform: translateX(1px) translateY(1px);
-}
-header #play-pause i#pause::before {
-   border-right: 4px solid #fff;
-   border-spacing: 4px;
-   border-left: 4px solid #fff;
-}
+   position: relative;
+   display: inline-flex;
+   align-items: center;
+ }
+ 
+ header #play-pause i {
+   width: 0.75em;
+   height: 1em;
+   font-size: 1.5rem;
+   content: "";
+   color: white;
+ }
+ 
+ header button i#play::before {
+   content: "\25BA"; 
+ }
+ 
+ header button i#pause::before {
+   content: "\2759 \2759";
+ }
 
+ header button i#restart::before {
+   font-size: 0.8em;
+   vertical-align: middle;
+   padding-right: 5px;
+ }

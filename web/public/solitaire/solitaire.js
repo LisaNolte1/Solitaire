@@ -2,7 +2,7 @@ const suits = ['s', 'h', 'c', 'd'];
 const values = ['A', '02', '03', '04', '05', '06', '07', '08', '09', '10', 'J', 'Q', 'K']
 
 let deck, pile, draw, stacks, aces, winner, clickedCard, firstClickDest, firstStackId, 
-cardArr, secondsPlayed, counter, boardScore, totalScore, drawCycles, clickCount, isPaused;
+cardArr, secondsPlayed, counter, boardScore, totalScore, drawCycles, clickCount, isPaused, clickedElement;
 
 
 const boardEls = {
@@ -21,9 +21,13 @@ const boardEls = {
     stack7: document.getElementById('stack7')
 }
 
-const timerEl = document.getElementById('timer');
-const scoreEl = document.getElementById('score');
+const timerEl = document.querySelector("#timer p");
+const movesEl = document.querySelector(".move-count p");
+const scoreEl = document.querySelector("#score p");
 const playPauseEl = document.getElementById("play-pause");
+const playIcon = document.getElementById("play");
+const pauseIcon = document.getElementById("pause");
+const restartIcon = document.getElementById("restart");
 
 document.querySelector('body').addEventListener('click', handleClick);
 
@@ -33,7 +37,9 @@ function init() {
     stopTimer();
     playPauseEl.classList.remove('play');
     playPauseEl.classList.add('pause');
+    restartIcon.style.display = "none";
     clickCount = 0;
+    clickedElement = null;
     deck = [];
     pile = [];
     draw = [];
@@ -56,7 +62,7 @@ function init() {
 }
 
 function render() {
-    clearAllDivs();
+    clearAllTableItems();
     renderStacks();
     renderPile();
     renderDraw();
@@ -65,7 +71,13 @@ function render() {
     updateScore();
     if(checkWinner()) {
         clearInterval(counter);
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'none';
+        restartIcon.style.display = "inline-block"
+        playPauseEl.classList.remove('pause');
+        playPauseEl.classList.remove('play');
         document.querySelector('h1').textContent = 'You Win!';
+
     }
 }
 
@@ -184,10 +196,10 @@ function getScore() {
 function updateScore() {
     let displayScore = totalScore;
     if (displayScore < 0) displayScore = 0;
-    scoreEl.textContent = `Score - ${displayScore}`
+    scoreEl.textContent = `${displayScore}`
 }
 
-function clearAllDivs() {
+function clearAllTableItems() {
     for(let boardEl in boardEls) {
         while(boardEls[boardEl].firstChild) {
             boardEls[boardEl].removeChild(boardEls[boardEl].firstChild);
@@ -195,70 +207,39 @@ function clearAllDivs() {
     }
 }
 
-function isDoubleClick() {
-    clickCount++;
-    if (clickCount === 1) {
-        singleClickTimer = setTimeout(function() {
-        clickCount = 0;
-        return false;
-        }, 300);
-    } else if (clickCount === 2) {
-        clearTimeout(singleClickTimer);
-        clickCount = 0;
-        return true;
-    }
-}
-
 function handleClick(evt) {
 
-    let clickDest = getClickDestination(evt.target);
-   //  start the timer on user's first click
-    if(!counter && clickDest !== 'resetButton') {
-        startTimer();
-    }
-
-    if (clickDest.includes('stack')) {
-        isDoubleClick() ? handleStackDoubleClick(evt.target) : handleStackClick(evt.target);
-    } else if (clickDest.includes('ace')) {
-
-        handleAceClick(evt.target);
-    } else if (clickDest === 'draw') {
-        isDoubleClick() ? handleStackDoubleClick(evt.target) :handleDrawClick(evt.target);
-    } else if (clickDest === 'pile') {
-        handlePileClick();
-    } else if (clickDest === 'resetButton') {
-        init();
-    }
-    else if (clickDest === 'play')
-    {
-         playGame();
-    }
-    else if (clickDest === 'pause'){
-       pauseGame();
-    }
-}
-
-function handleStackDoubleClick(element) {
-    let stackId = getClickDestination(element).replace('stack', '') -1;
-    let clickDest = getClickDestination(element);
-    let topCard;
-
-    if(stackId) {
-        topCard = stacks[stackId][stacks[stackId].length -1];
-    } else { 
-        topCard = draw[draw.length -1];
-    }
-
-    if (document.querySelector('.highlight')) {
-        let highlightEl = document.querySelector('.highlight')
-        if (isTheSameCard(highlightEl, clickedCard) && clickDest === getClickDestination(highlightEl)) {
-            checkForLegalMove(clickDest);
-        }
-    } else {
-        if (topCard && isFaceUpCard(element)) {
-            checkForLegalMove(clickDest)
-        }
-    }
+   let clickDest = getClickDestination(evt.target);
+  
+   // Start the timer on the user's first click
+   if (!counter && clickDest !== 'resetButton') {
+     startTimer();
+   }
+ 
+   if (clickDest.includes('stack')) {
+     handleStackClick(evt.target);
+   } else if (clickDest.includes('ace')) {
+     handleAceClick(evt.target);
+   } else if (clickDest === 'draw') {
+     handleDrawClick(evt.target);
+   } else if (clickDest === 'pile') {
+     handlePileClick();
+   } else if (clickDest === 'resetButton') {
+     init();
+   } else if (clickDest === 'play') {
+     playGame();
+   } else if (clickDest === 'pause') {
+     pauseGame();
+   }
+ 
+   // Perform deselection action for other elements
+   if (clickedElement && clickedElement !== evt.target) {
+     // Perform deselection action here
+     // ...
+   }
+ 
+   // Update the clicked element to the current clicked element
+   clickedElement = evt.target;
 }
 
 function isTheSameCard(cardEl, cardObj) {
@@ -387,6 +368,7 @@ function handleStackClick(element) {
     } else if (!clickedCard && element === element.parentNode.lastChild) {
         stacksFaceUp[stackId]++;
         boardScore += 5;
+        incrementMoves();
         render();
 
     // move card to stack destination
@@ -412,6 +394,7 @@ function handleStackClick(element) {
             clickedCard = null;
             render();
         }
+        incrementMoves();
 
     // move card to empty stack destination
     } else if (clickedCard && isEmptyStack(element) && getCardValue(clickedCard) === 13) {
@@ -421,6 +404,7 @@ function handleStackClick(element) {
         }
         if(firstStackId === 'draw') boardScore += 5;
         clickedCard = null;
+        incrementMoves();
         render();
     } 
 } 
@@ -429,7 +413,6 @@ function handleAceClick(element) {
 
     let aceId = getClickDestination(element).replace('ace', '') -1;
     let clickDest = getClickDestination(element);
-    console.log(clickDest);
     let topCard = aces[aceId][aces[aceId].length -1];
 
     // if a face up card hasn't been clicked yet, select and highlight this one
@@ -453,6 +436,7 @@ function handleAceClick(element) {
                     aces[aceId].push(cardArr.pop());
                 }
                 clickedCard = null;
+                incrementMoves();
                 render();
             }
 
@@ -463,6 +447,7 @@ function handleAceClick(element) {
                     aces[aceId].push(cardArr.pop());
                 }
                 clickedCard = null;
+                incrementMoves();
                 render();
             }
         }    
@@ -492,6 +477,7 @@ function handleDrawClick(element) {
             draw.push(cardArr.pop());
         }
         clickedCard = null;
+        incrementMoves();
         render();
     } 
 }
@@ -511,6 +497,7 @@ function handlePileClick () {
             if (drawCycles > 1) boardScore -= 100;
             render();
         }
+        incrementMoves();
     }
 }
 
@@ -586,23 +573,22 @@ function startTimer() {
  function pauseGame() {
    clearInterval(counter);
    isPaused = true;
-   playPauseEl.classList.remove('play');
-   playPauseEl.classList.add('pause');
+   toggleIcons();
  }
  
  function playGame() {
    if (!isPaused) return; // Check if already running
  
    isPaused = false;
-   playPauseEl.classList.remove('pause');
-   playPauseEl.classList.add('play');
+   toggleIcons();
+ 
    counter = setInterval(count, 1000);
  }
  
  function stopTimer() {
    secondsPlayed = 0;
    clearInterval(counter);
-   timerEl.textContent = `Time - 0:00`;
+   timerEl.textContent = "00:00";
  }
  
  function count() {
@@ -618,9 +604,40 @@ function startTimer() {
    minutes = Math.floor(secondsPlayed / 60) - hours * 60;
    seconds = secondsPlayed - minutes * 60;
  
-   timerEl.textContent = `Time - ${hours > 0 ? `${hours}:` : ''}${minutes < 10 && hours > 0 ? `0${minutes}` : minutes}:${
-     seconds < 10 ? `0${seconds}` : seconds}`;
+   const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+   timerEl.textContent = formattedTime;
  }
+ 
+ function padZero(num) {
+   return num.toString().padStart(2, "0");
+ }
+ 
+ // Helper function to toggle play/pause icons
+ function toggleIcons() {
+   const playIcon = document.querySelector("#play");
+   const pauseIcon = document.querySelector("#pause");
+ 
+   playIcon.classList.toggle("hidden");
+   pauseIcon.classList.toggle("hidden");
+ }
+
+function toggleIcons() {
+  if (playIcon.style.display === 'none') {
+   playIcon.style.display = 'inline-block';
+   pauseIcon.style.display = 'none';
+   playPauseEl.classList.remove('pause');
+   playPauseEl.classList.add('play');
+  } else {
+   playIcon.style.display = 'none';
+   pauseIcon.style.display = 'inline-block';
+   playPauseEl.classList.remove('play');
+   playPauseEl.classList.add('pause');
+  }
+}
+
+playIcon.style.display = 'none';
+pauseIcon.style.display = 'inline-block';
+
 
 function isFaceUpCard(element) {
     return (element.className.includes('card') && !(element.className.includes('back')) && !(element.className.includes('outline'))) 
@@ -635,7 +652,6 @@ function isAcePile(element) {
 }
 
 function getClickDestination(element) {
-   console.log(element);
     if (element.id) {
         return element.id;
     } 
@@ -654,161 +670,13 @@ function winGame() {
     render();
 }
 
-function throwConfetti() {
-   console.log('Confetti!');
-
-   var COLORS, Confetti, NUM_CONFETTI, canvas, confetti, context, drawCircle, drawCircle2, drawCircle3, i, range, xpos;
-
-   NUM_CONFETTI = 60;
-
-   COLORS = [[255, 255, 255], [255, 144, 0], [255, 255, 255], [255, 144, 0], [0, 277, 235]];
-
-   PI_2 = 2 * Math.PI;
-
-   canvas = d.getElementById("confetti");
-
-   context = canvas.getContext("2d");
-
-   window.w = 0;
-
-   window.h = 0;
-
-   window.resizeWindow = function() {
-      window.w = canvas.width = window.innerWidth;
-      return window.h = canvas.height = window.innerHeight;
-   };
-
-   window.addEventListener('resize', resizeWindow, false);
-
-   window.onload = function() {
-      return setTimeout(resizeWindow, 0);
-   };
-
-   range = function(a, b) {
-      return (b - a) * Math.random() + a;
-   };
-
-   drawCircle = function(x, y, r, style) {
-      context.beginPath();
-      context.moveTo(x, y);
-      context.bezierCurveTo(x - 17, y + 14, x + 13, y + 5, x - 5, y + 22);
-      context.lineWidth = 3;
-      context.strokeStyle = style;
-      return context.stroke();
-   };
-
-   drawCircle2 = function(x, y, r, style) {
-      context.beginPath();
-      context.moveTo(x, y);
-      context.lineTo(x + 10, y + 10);
-      context.lineTo(x + 10, y);
-      context.closePath();
-      context.fillStyle = style;
-      return context.fill();
-   };
-
-   drawCircle3 = function(x, y, r, style) {
-      context.beginPath();
-      context.moveTo(x, y);
-      context.lineTo(x + 10, y + 10);
-      context.lineTo(x + 10, y);
-      context.closePath();
-      context.fillStyle = style;
-      return context.fill();
-   };
-
-   xpos = 0.9;
-
-   d.onmousemove = function(e) {
-      return xpos = e.pageX / w;
-   };
-
-   window.requestAnimationFrame = (function() {
-      return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
-            return window.setTimeout(callback, 100 / 20);
-      };
-   })();
-
-   Confetti = (function() {
-      function Confetti() {
-         this.style = COLORS[~~range(0, 5)];
-         this.rgb = "rgba(" + this.style[0] + "," + this.style[1] + "," + this.style[2];
-         this.r = ~~range(2, 6);
-         this.r2 = 2 * this.r;
-         this.replace();
-      }
-
-      Confetti.prototype.replace = function() {
-         this.opacity = 0;
-         this.dop = 0.03 * range(1, 4);
-         this.x = range(-this.r2, w - this.r2);
-         this.y = range(-20, h - this.r2);
-         this.xmax = w - this.r;
-         this.ymax = h - this.r;
-         this.vx = range(0, 2) + 8 * xpos - 5;
-         return this.vy = 0.7 * this.r + range(-1, 1);
-      };
-
-      Confetti.prototype.draw = function() {
-         var ref;
-         this.x += this.vx;
-         this.y += this.vy;
-         this.opacity += this.dop;
-         if (this.opacity > 1) {
-           this.opacity = 1;
-           this.dop *= -1;
-         }
-         if (this.opacity < 0 || this.y > this.ymax) {
-           this.replace();
-         }
-         if (!((0 < (ref = this.x) && ref < this.xmax))) {
-           this.x = (this.x + this.xmax) % this.xmax;
-         }
-         drawCircle(~~this.x, ~~this.y, this.r, this.rgb + "," + this.opacity + ")");
-         drawCircle3(~~this.x * 0.5, ~~this.y, this.r, this.rgb + "," + this.opacity + ")");
-         return drawCircle2(~~this.x * 1.5, ~~this.y * 1.5, this.r, this.rgb + "," + this.opacity + ")");
-      };
-
-      return Confetti;
-
-   })();
-
-   confetti = (function() {
-      var j, ref, results;
-      results = [];
-      for (i = j = 1, ref = NUM_CONFETTI; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
-         results.push(new Confetti);
-      }
-      return results;
-   })();
-
-   window.step = function() {
-      var c, j, len, results;
-      requestAnimationFrame(step);
-      context.clearRect(0, 0, w, h);
-      results = [];
-      for (j = 0, len = confetti.length; j < len; j++) {
-         c = confetti[j];
-         results.push(c.draw());
-      }
-      return results;
-   };
-
-   step();
-
-   // fix initial bug when firing
-   resizeWindow();
-
-   // fade in
-   canvas.style.opacity = 0;
-   var tick = function() {
-      canvas.style.opacity = +canvas.style.opacity + 0.01;
-      if ( +canvas.style.opacity < 1 ) {
-         ( window.requestAnimationFrame &&
-           requestAnimationFrame(tick) ) ||
-         setTimeout(tick, 100)
-      }
-   };
-   tick();
-
+function replayGame() {
+   init();
 }
+
+function incrementMoves() {
+   const movesElement = document.querySelector(".move-count p");
+   const currentMoves = parseInt(movesElement.textContent);
+   const newMoves = currentMoves + 1;
+   movesElement.textContent = newMoves;
+ }
