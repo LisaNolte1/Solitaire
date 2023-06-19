@@ -1,7 +1,7 @@
 @charset "UTF-8";
 .card {
   box-sizing: border-box;
-  margin: 5px 5px 5px 5px;
+  margin: 5px;
   cursor: pointer;
   /* Set the card's dimensions, and size it relative to
      it's font size. */
@@ -16,12 +16,31 @@
   background-position: center center;
   background-size: contain;
   font-size: 26px;
-  /* "Hide" any text within the element (use text to be
-     simply compliant with screen readers, etc.). */
-  /* Default sizes for cards (size based off the font). */
-  /* Optional styles for cards: borderless and drop shadow. */
-  /* Not a card, but a card-shaped outline to represent a
-     droppable place, like an empty pile. */ }
+}
+@media (min-width: 1024px) {
+  .card {
+    width: 3.8em;
+    height: 5.2em;
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 3.5em;
+    height: 4.5em;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 3em;
+    height: 4em;
+    font-size: 16px;
+  }
+}
+
   .card.small {
     font-size: 12px; }
   .card.large {

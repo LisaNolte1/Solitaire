@@ -48,27 +48,34 @@ ul {
 
 #topRow {
    display: flex;
-}
+   justify-content: space-between;
+   gap: 5px;
+ }
 
 #pile {
-   align-self: left;
+   order: 1;
 }
 
 #draw {
-   align-self: left;
+   order: 2;
 }
 
 #ace1,
 #ace2,
 #ace3,
 #ace4 {
-   align-self: right;
+   order: 3;
+}
+
+#ace1 {
+   margin-left: 20%;
 }
 
 #bottomRow {
-   display: flex;
+   display:grid;
+   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
    flex-wrap: wrap;
-   margin-bottom: 38vh;
+   margin-bottom: 14%;
 }
 header {
    box-sizing: border-box;
