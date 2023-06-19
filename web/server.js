@@ -45,6 +45,19 @@ const requestListener = async function (req, res) {
         }
       });
     break;
+    case '/solitaire':
+      fs.readFile(__dirname + '/public/solitaire/solitaire.html', (err, contents) => {
+        if (err) {
+          res.writeHead(500);
+          res.end(err);
+        } else {
+          res.setHeader("Content-Type", "text/html");
+          res.setHeader("Access-Control-Allow-Origin", "*");
+          res.writeHead(200);
+          res.end(contents);
+        }
+      });
+    break;
     default:
       res.writeHead(404);
       res.end(JSON.stringify({error:"Resource not found"}));

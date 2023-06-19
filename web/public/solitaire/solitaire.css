@@ -1,0 +1,200 @@
+*, *::before, *::after {
+   box-sizing: border-box;
+}
+
+body {
+   margin: 0%;
+   width: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: center;
+   height: 100%;
+   font-family: 'Grenze', serif;
+   background: radial-gradient(#409c2b, #385e2c);
+}
+
+main {
+   width: 100%;
+   padding: 2%;
+   margin: 0%;
+}
+
+h1 {
+   color: lightgrey;
+   font-size: 3.5vw;
+   padding-top: 16px;
+   margin-bottom: 0%;
+}
+
+ul {
+   list-style-type: none;
+ }
+
+#game-board {
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   align-items: stretch center;
+   border: 2px solid rgba(167, 201, 164, 0.6);
+   border-radius: 5px;    
+   padding: 20px 20px 20px 20px;
+   
+}
+
+#game-board tr td {
+   position: relative;
+}
+
+#topRow {
+   display: flex;
+}
+
+#pile {
+   align-self: left;
+}
+
+#draw {
+   align-self: left;
+}
+
+#ace1,
+#ace2,
+#ace3,
+#ace4 {
+   align-self: right;
+}
+
+#bottomRow {
+   display: flex;
+   flex-wrap: wrap;
+   margin-bottom: 38vh;
+}
+header {
+   box-sizing: border-box;
+   text-align: right;
+   align-items: flex-end;
+   font-size: 20px;
+   position: absolute;
+   width: 100%;
+   padding: 5px;
+   margin: 0% 0% 1% 0%;
+   background: rgba(0,0,0,.15);
+ }
+
+ header section {
+   text-decoration: none;
+   display: inline;
+   width: 83px;
+   font-style: normal;
+   font-weight: 500;
+   color: white;
+   flex:content;
+   order: 1;
+   flex-grow: 0;
+   background:none;
+   border:none;
+   margin:0;
+   padding:0;
+   cursor: pointer;
+ }
+ 
+ header p {
+   display: inline-block;
+   padding-left: 10px;
+   padding-right: 10px;
+ 
+ }
+ 
+ header ul {
+   background-color: transparent;
+   display: flex;
+   justify-content:flex-end;
+   align-items:center;
+   padding-right: 10px;
+ }
+ 
+ a:hover {
+   color: rgb(167, 167, 167);
+   background-color: transparent;
+   border: none;
+ }
+
+
+button {
+   font-size: 1.6vw;
+   background: #629736;
+   width: 10vw;
+   border: solid 1px lightgrey;
+   border-radius: 2px;
+   color: lightgrey;
+   font-family: 'Grenze', serif;
+}
+
+.highlight {
+   box-shadow: 0px 0px 10px .3vw rgb(255, 255, 255);
+}
+
+#score {
+   position: relative;
+   margin-top: 0%;
+   padding: 1em;
+   line-height: 1;
+}
+#score > * {
+   display: inline-block;
+   min-width: 100px;
+}
+#score > *:last-child {
+   float: right;
+   text-align: right;
+}
+#score label {
+   margin-bottom: 0;
+}
+header .timer button {
+   display: none;
+   position: absolute;
+   -webkit-appearance: none;
+   background: transparent;
+   outline: none;
+   border: 0;
+   padding: 0;
+   top: 0;
+   left: 0;
+   width: 3em;
+   height: 100%;
+}
+header .timer button i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 0;
+}
+header #play-pause i::before {
+  position: absolute;
+  top: 50%;
+  width: 0.75em;
+  height: 1em;
+  float: left;
+  margin-top: -0.5em;
+  font-size: 1.5rem;
+  content: none;
+}
+header #play-pause i#play::before {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 18px solid #fff;
+  transform: translateX(1px) translateY(1px);
+}
+header #play-pause i#pause::before {
+   border-right: 4px solid #fff;
+   border-spacing: 4px;
+   border-left: 4px solid #fff;
+}
+
