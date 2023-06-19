@@ -1,0 +1,171 @@
+*, *::before, *::after {
+   box-sizing: border-box;
+}
+
+body {
+   margin: 0%;
+   width: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: center;
+   height: 100%;
+   font-family: 'Grenze', serif;
+   background: radial-gradient(#409c2b, #385e2c);
+}
+
+main {
+   width: 100%;
+   padding: 2%;
+   margin: 0%;
+}
+
+h1 {
+   color: lightgrey;
+   font-size: 3.5vw;
+   padding-top: 16px;
+   margin-bottom: 0%;
+}
+
+ul {
+   list-style-type: none;
+ }
+
+#game-board {
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   align-items: stretch center;
+   border: 2px solid rgba(167, 201, 164, 0.6);
+   border-radius: 5px;    
+   padding: 20px 20px 20px 20px;
+   
+}
+
+#game-board tr td {
+   position: relative;
+}
+
+#topRow {
+   display: flex;
+   justify-content: space-between;
+   gap: 5px;
+ }
+
+#pile {
+   order: 1;
+}
+
+#draw {
+   order: 2;
+}
+
+#ace1,
+#ace2,
+#ace3,
+#ace4 {
+   order: 3;
+}
+
+#ace1 {
+   margin-left: 20%;
+}
+
+#bottomRow {
+   display:grid;
+   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+   flex-wrap: wrap;
+   margin-bottom: 14%;
+}
+header {
+   box-sizing: border-box;
+   text-align: right;
+   align-items: flex-end;
+   font-size: 20px;
+   position: absolute;
+   width: 100%;
+   padding: 5px;
+   margin: 0% 0% 1% 0%;
+   background: rgba(0,0,0,.15);
+ }
+
+ header section {
+   text-decoration: none;
+   display: inline;
+   width: 83px;
+   font-style: normal;
+   font-weight: 500;
+   color: white;
+   flex:content;
+   order: 1;
+   flex-grow: 0;
+   background:none;
+   border:none;
+   margin:0;
+   padding:0;
+   cursor: pointer;
+   padding-left: 2%;
+ }
+ 
+ header p {
+   display: inline-block;
+   padding-right: 10px;
+ }
+ 
+ header ul {
+   background-color: transparent;
+   display: flex;
+   justify-content:flex-end;
+   align-items:center;
+   padding-right: 10px;
+ }
+ 
+ a:hover {
+   color: rgb(167, 167, 167);
+   background-color: transparent;
+   border: none;
+ }
+
+.highlight {
+   box-shadow: 0px 0px 10px .3vw rgb(235, 0, 0);
+}
+
+header .timer {
+   margin-left: 1.5%;
+}
+
+header .move-count {
+   margin-left: 1.5%;
+}
+
+header #play-pause {
+   background-color: transparent;
+   border: none;
+   box-shadow: none;
+   padding: 0;
+   position: relative;
+   display: inline-flex;
+   align-items: center;
+ }
+ 
+ header #play-pause i {
+   width: 0.75em;
+   height: 1em;
+   font-size: 1.5rem;
+   content: "";
+   color: white;
+ }
+ 
+ header button i#play::before {
+   content: "\25BA"; 
+ }
+ 
+ header button i#pause::before {
+   content: "\2759 \2759";
+ }
+
+ header button i#restart::before {
+   font-size: 0.8em;
+   vertical-align: middle;
+   padding-right: 5px;
+ }

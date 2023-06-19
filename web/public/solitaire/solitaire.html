@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/css/cardstarter.css">
+    <link rel="stylesheet" href="/public/solitaire/solitaire.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <title>Document</title>
+</head>
+<body>
+    <header>
+       <button id="play-pause">
+          <i id="play"></i>
+          <i id="pause"></i>
+          <i id="restart" class="fas fa-redo"></i>
+       </button>
+        <section id="timer" class="timer">
+           <label>Timer:</label>
+           <p>00:00</p>
+        </section>
+        <section class="move-count" data-moves="0">
+           <label>Moves:</label>
+           <p>0</p>
+        </section>
+        <section id="score" class="score" data-score="0">
+           <label>Score:</label>
+           <p>0</p>
+        </section>
+     </header>
+     <br>
+    <main>
+      <h1>Solitaire</h1>
+      <table id="game-board">
+         <tr id="topRow">
+             <td id="pile" class="card outline"></td>
+             <td id="draw" class="card outline"></td>
+             <td id="ace1" class="card outline"></td>
+             <td id="ace2" class="card outline"></td>
+             <td id="ace3" class="card outline"></td>
+             <td id="ace4" class="card outline"></td>
+         </tr>
+         <tr id="bottomRow">
+             <td id="stack1" class="card outline"></td>
+             <td id="stack2" class="card outline"></td>
+             <td id="stack3" class="card outline"></td>
+             <td id="stack4" class="card outline"></td>
+             <td id="stack5" class="card outline"></td>
+             <td id="stack6" class="card outline"></td>
+             <td id="stack7" class="card outline"></td>
+         </tr>
+     </table>
+    </main>
+    <script src="/public/solitaire/solitaire.js"></script>
+</body>
+</html>
