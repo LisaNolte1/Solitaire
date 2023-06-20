@@ -35,11 +35,12 @@ async function getUserScores(username) {
   const query = "SELECT TOP 10 Score FROM Score WHERE Username = @username ORDER BY Score Desc"
 
   try {
-    let connection = await sql.connect(config);
+    const connection = await sql.connect(config);
     
     const result = await connection.request()
                                     .input("username", sql.VarChar, username)
                                     .query(query)
+    await connection.close();
 
     return result.recordset
   } catch (error) {
